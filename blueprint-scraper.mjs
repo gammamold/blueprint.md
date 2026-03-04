@@ -50,12 +50,45 @@ const CONFIG = {
 
 // Search queries — tuned to find actual build specs, not READMEs
 const SEARCH_QUERIES = [
+  // Audio / VST
   "VST plugin specification JUCE extension:md",
   "audio synthesizer blueprint specification extension:md",
-  "react app blueprint specification features extension:md",
-  "software specification build features tech stack extension:md",
   "plugin spec architecture components extension:md",
+  "audio effect plugin specification parameters extension:md",
+  "MIDI controller plugin blueprint specification extension:md",
+
+  // Web / React apps
+  "react app blueprint specification features extension:md",
   "app blueprint requirements features extension:md",
+  "web app specification tech stack components extension:md",
+  "SPA specification features architecture extension:md",
+  "dashboard app blueprint specification extension:md",
+
+  // Tools / CLIs
+  "CLI tool specification build extension:md",
+  "software specification build features tech stack extension:md",
+  "developer tool blueprint specification extension:md",
+
+  // Games
+  "game design document specification extension:md",
+  "browser game blueprint specification features extension:md",
+
+  // Mobile
+  "mobile app blueprint requirements extension:md",
+  "android app specification features extension:md",
+
+  // Bots / Extensions
+  "discord bot specification features extension:md",
+  "chrome extension specification features extension:md",
+  "browser extension blueprint specification extension:md",
+
+  // APIs / Backend
+  "API design specification endpoints extension:md",
+  "REST API blueprint specification extension:md",
+
+  // UI
+  "UI component library specification extension:md",
+  "design system blueprint specification extension:md",
 ];
 
 // ─── GITHUB API ───────────────────────────────────────────────────────────────

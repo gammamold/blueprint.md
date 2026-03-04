@@ -1,10 +1,13 @@
 import "@/styles/globals.css";
 import { AuthProvider } from "@/context/auth";
+import { LangProvider } from "@/context/lang";
 
 export default function App({ Component, pageProps }) {
   return (
-    <AuthProvider>
-      <Component {...pageProps} />
-    </AuthProvider>
+    <LangProvider>
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
+    </LangProvider>
   );
 }
