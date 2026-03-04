@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 
 /**
- * BLUEPRINT.MD — GitHub Scraper
- * 
- * Searches GitHub for .md files that look like buildable specs,
- * classifies them with Claude, and saves matches as importable JSON.
+ * BLUEPRINT.MD — GitHub Scraper (music-only)
+ *
+ * Searches GitHub for .md files that look like buildable music/audio specs
+ * (VST, synths, effects, MIDI, etc.), classifies them with Claude, and saves
+ * matches as importable JSON. Only music-related blueprints are kept.
  *
  * Setup:
  *   npm install node-fetch dotenv
- * 
+ *
  * .env file:
  *   GITHUB_TOKEN=your_github_personal_access_token
  *   ANTHROPIC_API_KEY=your_anthropic_api_key
  *
  * Run:
- *   node blueprint-scraper.js
- *   node blueprint-scraper.js --query "VST plugin spec" --max 50
+ *   node blueprint-scraper.mjs
+ *   node blueprint-scraper.mjs --max 50
  */
 
 import fetch from "node-fetch";
@@ -48,47 +49,22 @@ const CONFIG = {
   maxFileSize: 50000, // bytes — skip giant files
 };
 
-// Search queries — tuned to find actual build specs, not READMEs
+// Search queries — music/audio only (VST, synths, effects, MIDI, DAW, etc.)
 const SEARCH_QUERIES = [
-  // Audio / VST
   "VST plugin specification JUCE extension:md",
   "audio synthesizer blueprint specification extension:md",
   "plugin spec architecture components extension:md",
   "audio effect plugin specification parameters extension:md",
   "MIDI controller plugin blueprint specification extension:md",
-
-  // Web / React apps
-  "react app blueprint specification features extension:md",
-  "app blueprint requirements features extension:md",
-  "web app specification tech stack components extension:md",
-  "SPA specification features architecture extension:md",
-  "dashboard app blueprint specification extension:md",
-
-  // Tools / CLIs
-  "CLI tool specification build extension:md",
-  "software specification build features tech stack extension:md",
-  "developer tool blueprint specification extension:md",
-
-  // Games
-  "game design document specification extension:md",
-  "browser game blueprint specification features extension:md",
-
-  // Mobile
-  "mobile app blueprint requirements extension:md",
-  "android app specification features extension:md",
-
-  // Bots / Extensions
-  "discord bot specification features extension:md",
-  "chrome extension specification features extension:md",
-  "browser extension blueprint specification extension:md",
-
-  // APIs / Backend
-  "API design specification endpoints extension:md",
-  "REST API blueprint specification extension:md",
-
-  // UI
-  "UI component library specification extension:md",
-  "design system blueprint specification extension:md",
+  "JUCE plugin specification extension:md",
+  "audio unit AU plugin spec extension:md",
+  "VST3 plugin specification extension:md",
+  "synthesizer spec oscillators envelope extension:md",
+  "audio DSP filter specification extension:md",
+  "DAW plugin specification extension:md",
+  "music production tool specification extension:md",
+  "sound design plugin specification extension:md",
+  "audio processor specification extension:md",
 ];
 
 // ─── GITHUB API ───────────────────────────────────────────────────────────────
@@ -137,16 +113,18 @@ function getRepoInfo(item) {
 // ─── CLAUDE CLASSIFICATION ────────────────────────────────────────────────────
 
 async function classifyWithClaude(mdContent, repoInfo) {
-  const prompt = `You are classifying .md files for a blueprint marketplace.
+  const prompt = `You are classifying .md files for a music/audio blueprint marketplace.
 
-A valid blueprint is a .md spec file that an LLM can use to build working software — a VST plugin, app, UI component, game, or script. It should describe WHAT to build, not document existing code.
+We ONLY want music-related blueprints: VST/AU plugins, audio effects, synthesizers, MIDI tools, JUCE specs, audio DSP, etc. It must be a .md spec that an LLM could use to build working music software. It should describe WHAT to build, not document existing code.
+
+Reject anything that is not music/audio related (no generic web apps, games, bots, or non-audio tools).
 
 Analyze this file and return ONLY valid JSON, no markdown fences:
 
 {
   "is_blueprint": true or false,
   "confidence": 0-100,
-  "category": "VST" | "App" | "UI" | "Game" | "Script" | "Other",
+  "category": "VST" | "App" | "UI" | "Script" | "Other",
   "title": "inferred short title",
   "description": "one sentence description of what it builds",
   "tags": ["tag1", "tag2", "tag3"],
@@ -155,7 +133,7 @@ Analyze this file and return ONLY valid JSON, no markdown fences:
   "reason": "brief explanation of your decision"
 }
 
-Only mark is_blueprint=true if this file is clearly a buildable specification, not a README, changelog, documentation, or tutorial.
+Only mark is_blueprint=true if this file is clearly a buildable MUSIC/AUDIO specification (plugin, synth, effect, MIDI, etc.), not a README, changelog, or non-music doc. Prefer category "VST" for plugins/synths/effects.
 
 File from: ${repoInfo.repo}
 
@@ -302,6 +280,19 @@ async function main() {
 
       if (!classification.is_blueprint || classification.confidence < 70) {
         log("✗", `Not a blueprint (${classification.confidence}% confidence)`, classification.reason);
+        results.rejected++;
+        continue;
+      }
+
+      // Music-only: reject if Claude put it in a non-music category (e.g. generic App/Game)
+      const musicCategories = ["VST", "App", "UI", "Script"]; // App/UI ok for music apps
+      const isLikelyMusic = classification.category === "VST" ||
+        (classification.tags && [...(classification.tags || [])].some(t =>
+          /audio|vst|synth|midi|juce|plugin|effect|dsp|sound|music/i.test(String(t))
+        )) ||
+        /audio|vst|synth|midi|juce|plugin|effect|dsp|sound|music/i.test(classification.description || "");
+      if (!isLikelyMusic && classification.category !== "VST") {
+        log("✗", `Not music-related (${classification.category})`, classification.reason);
         results.rejected++;
         continue;
       }
