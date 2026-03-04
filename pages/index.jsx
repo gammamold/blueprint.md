@@ -206,13 +206,17 @@ function ValidationReport({ result }) {
         </span>
       </div>
       <div style={{padding:"12px 14px",display:"flex",flexDirection:"column",gap:12}}>
-        {[{label:t("validationSecurity"),data:result.security},{label:t("validationQuality"),data:result.quality}].map(({label,data})=>(
+        {[
+          result.relevance&&{label:t("validationRelevance"),data:result.relevance},
+          {label:t("validationSecurity"),data:result.security},
+          {label:t("validationQuality"),data:result.quality}
+        ].filter(Boolean).map(({label,data})=>(
           <div key={label}>
             <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
               <span style={{fontSize:9,color:"#444",letterSpacing:2}}>{label}</span>
               <span style={{fontSize:9,color:data.pass?"#4ADE80":"#F87171"}}>{data.pass?t("validationPass"):t("validationFail")}</span>
             </div>
-            <ScoreBar score={data.score} pass={data.pass}/>
+            <ScoreBar score={data.score ?? (data.pass ? 100 : 0)} pass={data.pass}/>
             {data.issues?.length>0&&<div style={{marginTop:6,display:"flex",flexDirection:"column",gap:3}}>{data.issues.map((iss,i)=><div key={i} style={{fontSize:10,color:"#F87171",paddingLeft:10,borderLeft:"1px solid #F8717133"}}>⚠ {iss}</div>)}</div>}
             {data.suggestions?.length>0&&<div style={{marginTop:4,display:"flex",flexDirection:"column",gap:3}}>{data.suggestions.map((s,i)=><div key={i} style={{fontSize:10,color:"#888",paddingLeft:10,borderLeft:"1px solid #333"}}>→ {s}</div>)}</div>}
           </div>

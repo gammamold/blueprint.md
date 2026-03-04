@@ -41,11 +41,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Missing messages" });
   }
 
-  // Fetch current approved blueprints for context
+  // Fetch current approved music blueprints only (VST, App, UI)
   const { data: bps } = await supabaseAdmin
     .from("blueprints")
     .select("id, title, category, tags, description")
     .eq("status", "approved")
+    .in("category", ["VST", "App", "UI"])
     .order("karma", { ascending: false })
     .limit(50);
 

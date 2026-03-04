@@ -1,8 +1,8 @@
 # blueprint_pipeline/brains/vst_brain.py
-# Prompts tuned for JUCE/C++ blueprints
+# Prompts tuned for music plugins (JUCE/C++)
 
-BUILDER_PROMPT = """You are an expert JUCE / C++ developer.
-Build the VST plugin described in this spec.
+BUILDER_PROMPT = """You are an expert JUCE / C++ developer building music plugins.
+Build the VST/AU plugin described in this spec (synth, effect, or music utility).
 Use JUCE 7, C++17, VST3/AU targets.
 Include all required files: PluginProcessor.h/cpp, PluginEditor.h/cpp, CMakeLists.txt.
 Return ONLY the code. No explanation."""
