@@ -25,7 +25,7 @@ AUTO_REJECT_THRESHOLD = int(os.environ.get("AUTO_REJECT_THRESHOLD", "40"))
 BUILDER_LLM = os.environ.get("BUILDER_LLM", "anthropic")
 CRITIC_LLM = os.environ.get("CRITIC_LLM", "google")
 
-# Category -> brain module name
+# Category -> brain module name (music-only for now; Game/Script/Other kept for DB compatibility)
 CATEGORIES = {
     "VST": "vst_brain",
     "App": "app_brain",

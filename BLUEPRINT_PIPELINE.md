@@ -1,6 +1,8 @@
 # Blueprint.md — Assembly Line Pipeline
 ## Implementation Guide for Claude Code
 
+**Note:** This project is **music-only** for now (VSTs, synths, effects, music apps). More themes may be added later.
+
 ---
 
 ## What We're Building

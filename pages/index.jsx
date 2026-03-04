@@ -4,7 +4,8 @@ import { useLang } from "@/context/lang";
 import { blueprints as bpHelpers } from "@/lib/supabase";
 import { supabase } from "@/lib/supabase";
 
-const CATEGORIES = ["All","VST","App","UI","Game","Script"];
+// Music-only for now: VST (plugins/synths/effects), App (music apps), UI (plugin UIs)
+const CATEGORIES = ["All", "VST", "App", "UI"];
 const LLMS = [
   { id:"claude", label:"Claude", sub:"Sonnet 4.6", color:"#E8845A" },
   { id:"gemini", label:"Gemini", sub:"2.0 Flash", color:"#4A9EFF" },

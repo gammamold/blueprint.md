@@ -3,18 +3,18 @@ category: App
 # blueprint_id: <paste-your-supabase-blueprint-uuid-here-to-write-results>
 ---
 
-# Hello Counter
+# Simple BPM Counter
 
-A minimal React counter app.
+A minimal music utility: tap BPM and display the current tempo.
 
 ## Requirements
 
-- One button: "Increment"
-- Display the current count
+- One button: "Tap"
+- Display the current BPM (beats per minute)
 - Use React with hooks
-- No backend
+- Calculate BPM from the last 4 tap intervals
 
 ## Acceptance
 
-- Clicking the button increases the count by 1
-- Count starts at 0
+- Tapping the button updates BPM; display shows the value
+- After 4 taps, BPM is shown; resets after 2 seconds of no tap

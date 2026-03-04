@@ -1,5 +1,7 @@
 # Blueprint Pipeline
 
+**Music-only** for now (VSTs, synths, effects, music apps). More themes may be added later.
+
 CI-style pipeline for blueprint `.md` files: **Claude** builds from the spec, **Gemini** scores the output against the spec, results are written to Supabase. The marketplace only shows blueprints that have passed the pipeline.
 
 ## Flow

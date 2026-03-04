@@ -6,7 +6,7 @@ import { useAuth } from "@/context/auth";
 const STARTER_PROMPTS = [
   "I'm a music producer looking to analyze my mixes",
   "I want to build a synthesizer plugin but don't know where to start",
-  "I'm a developer and need a productivity app",
+  "I need a simple BPM tap or metronome tool",
   "I make beats and want something to process drums",
 ];
 
@@ -85,7 +85,7 @@ function CompositeBlueprint({ content, onBuild, onSave, saving }) {
         </pre>
       )}
       <div style={{padding:"10px 14px",borderTop:"1px solid #E8845A11",display:"flex",gap:8}}>
-        <button onClick={()=>onBuild({title, content, category:"Other", id:"composite"})}
+        <button onClick={()=>onBuild({title, content, category:"VST", id:"composite"})}
           style={{flex:1,padding:"9px",border:"none",borderRadius:3,background:"#E8845A",color:"#fff",cursor:"pointer",fontFamily:"'Bebas Neue',sans-serif",fontSize:14,letterSpacing:2}}>
           BUILD THIS →
         </button>
@@ -192,15 +192,15 @@ export default function Discovery() {
       const { blueprints: bpHelpers } = await import("@/lib/supabase");
       await bpHelpers.create({
         title,
-        description: "AI-generated composite blueprint from guided discovery.",
+        description: "AI-generated music blueprint from guided discovery.",
         content,
-        category: "Other",
+        category: "VST",
         tags: [],
         tech_stack: [],
         completeness: 70,
         authorId: authUser.id,
       });
-      alert("Blueprint saved! It will appear in the marketplace after review.");
+      alert("Blueprint saved! It will appear in the music marketplace after review.");
     } catch (e) {
       console.error(e);
       alert("Save failed: " + e.message);
@@ -234,12 +234,12 @@ export default function Discovery() {
         {!started && (
           <div style={{flex:1,display:"flex",flexDirection:"column",justifyContent:"center",paddingBottom:120}}>
             <div style={{marginBottom:32}}>
-              <div style={{fontSize:9,color:"#E8845A",letterSpacing:3,marginBottom:10}}>AI-GUIDED BLUEPRINT SEARCH</div>
+              <div style={{fontSize:9,color:"#E8845A",letterSpacing:3,marginBottom:10}}>AI-GUIDED MUSIC BLUEPRINT SEARCH</div>
               <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:36,lineHeight:1,color:"#eee",letterSpacing:2,marginBottom:12}}>
-                TELL ME WHAT<br/>YOU WANT TO BUILD
+                TELL ME WHAT<br/>MUSIC TOOL YOU WANT TO BUILD
               </div>
               <div style={{fontSize:12,color:"#444",lineHeight:1.8}}>
-                Not sure what blueprint you need? Just describe what you're trying to accomplish. Claude will search the library, find the best match — or combine multiple blueprints into something new.
+                Not sure which music blueprint you need? Describe the plugin, synth, effect, or music app you want. Claude will search the library, find the best match — or combine blueprints into something new.
               </div>
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:6}}>
@@ -271,7 +271,7 @@ export default function Discovery() {
       <div style={{position:"fixed",bottom:0,left:0,right:0,zIndex:100,background:"rgba(8,8,8,.97)",backdropFilter:"blur(12px)",borderTop:"1px solid rgba(255,255,255,.05)",padding:"16px 24px"}}>
         <div style={{maxWidth:680,margin:"0 auto",display:"flex",gap:10,alignItems:"flex-end"}}>
           <textarea ref={inputRef} value={input} onChange={e=>setInput(e.target.value)} onKeyDown={handleKey}
-            placeholder="Describe what you want to build, your profession, or what problem you're trying to solve..."
+            placeholder="Describe the music tool you want (plugin, synth, effect, BPM tool...)"
             rows={1} style={{flex:1,background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:4,padding:"11px 14px",color:"#aaa",fontSize:12,outline:"none",resize:"none",lineHeight:1.5,maxHeight:100,overflowY:"auto"}}
             onInput={e=>{e.target.style.height="auto";e.target.style.height=Math.min(e.target.scrollHeight,100)+"px"}}
           />
